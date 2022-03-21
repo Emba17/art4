@@ -1,52 +1,73 @@
-function updatePhone(val,code) {
-	if (code === "Backspace") {return}
-	if (val.length === 3 || val.length === 7 || val.length === 12) {
-		val += "-"
-	}
-	document.getElementById("contact-phone").value = val
+function validateForm() {
+var validFirstname=false;
+var validLastname=false;
+var validEmail=false;
+var validPhone=false;
+var validUsername=false;
+var validPassword=false;
+var validCountry=false;
+var validZipcode=false;
+
+var firstname = document.getElementById("FirstName").value;
+var lastname = document.getElementById("LastName").value;
+var userEmail = document.getElementById("Email").value;
+var atpos = userEmail.indexOf("@");
+var dotpos = userEmail.lastIndexOf(".");
+var phone = document.getElementById("Phone").value;
+var username = document.getElementById("Username").value;
+var password = document.getElementById("Password").value;
+var country = document.getElementById("Country").value;
+var zipcode = document.getElementById("Zipcode").value;
+
+if (firstname==="null" || firstname==="" || firstname.length > 20) {
+    errorMessages += "<p>The firstname is required and cannot be greater than 20 characters</p>";
 }
-
-function stripPhone() {
-	var cleanphone = ""
-	var phone = document.getElementById("contact-phone")
-	var phoneval = phone.value
-	for (z = 0; z < phoneval.length; z++) {
-		if (phoneval[z] === "-") {continue}
-		else {
-			cleanphone += phoneval[z]
-		}
-	}
-	phone.value = cleanphone
+else {
+   validFirstname = true;
 }
+if (lastname==="null" || lastname==="" || lastname.length > 20) {
+    errorMessages += "<p>The lastname is required and cannot be greater than 20 characters</p>";
+}
+else {
+   validLastname = true;
+}
+if (atpos< 1 || dotpos<atpos+2 || dotpos+2>=userEmail.length) {
+    errorMessages += "<p>Invalid email</p>";
+}
+else {
+   validEmail = true;
+}
+if (isNaN(phone) || phone.length >15 || phone===null || phone==="") {
+   errorMessages += "<p>Invalid phone number </p>";
+}
+else {
+   validPhone = true;
+}
+if (username==="null" || username==="" || username.length > 12) {
+    errorMessages += "<p>The username is required and cannot be greater than 12 characters</p>";
+}
+else{
+   validUsername = true;
+}
+if (password==="null" || password==="" || password.length > 7) {
+    errorMessages += "<p>The password is required and cannot be greater than 7 characters</p>";
+}
+else{
+   validPassword = true;
+}
+if (country === "USA") {
+   errorMessages += "<p>Zipcode is required</p>"
+}
+else{
+   validCountry = true;
+}
+if (zipcode.length > 5) {
+   errorMessages += "<p>Zipcode cannot be greater than 5 digits.</p>"
+}
+else {
+   validZipcode = true;
+}
+document.getElementById("errorMessages").innerHTML = errorMessages;
 
-function validateForm(){
-	stripPhone();
-	var frmvalidator = new Validator("contactform");
- 	frmvalidator.addValidation("contact-firstname","req","Please enter your First Name");
- 	frmvalidator.addValidation("contact-firstname","alpha","Please enter alphabetical characters only for first Name");
- 	frmvalidator.addValidation("contact-firstname","maxlen=20","Maximum number of characters for First Name is 20");
- 	frmvalidator.addValidation("contact-lastname","req","Please enter your Last Name");
- 	frmvalidator.addValidation("contact-lastname","alpha","Please enter alphabetical characters Only for last Name");
- 	frmvalidator.addValidation("contact-lastname","maxlen=50","Maximum number of characters for Last Name is 50");
- 	frmvalidator.addValidation("contact-email","req","Please enter your email");
- 	frmvalidator.addValidation("contact-email","email","Please enter a proper email address");
- 	frmvalidator.addValidation("contact-phone","req","Please enter your phone number");
- 	frmvalidator.addValidation("contact-phone","num","Please enter numbers only for phone number");
- 	frmvalidator.addValidation("contact-phone","maxlen=15","Maximum number of digits for phone is 15");
-
- 	frmvalidator.addValidation("contact-username","req","Please enter your username");
- 	frmvalidator.addValidation("contact-username","maxlen=12","Maximum number of characters for username is 12");
- 	frmvalidator.addValidation("contact-password","req","Please enter your password");
- 	frmvalidator.addValidation("contact-password","maxlen=7","Maximum number of characters for password is 7");
-
- 	frmvalidator.addValidation("contact-address","req","Please enter your address");
- 	frmvalidator.addValidation("contact-city","req","Please enter your city");
- 	frmvalidator.addValidation("contact-state","req","Please enter your state");
- 	frmvalidator.addValidation("contact-country","req","Please enter your country");
-
- 	if (document.getElementById("contact-country").value === "United States") {
- 		frmvalidator.addValidation("contact-zip","maxlen=5","Maximum number of characters for zip is 5");
- 	}
-
-
+return (validFirstname && validLastname && validEmail && validPhone && validUsername && validPassword && validZipcode);
 }
